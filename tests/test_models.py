@@ -1,5 +1,5 @@
 from src.models import Ticket, Priority
-from src.analyzer import filter_urgent, summarize
+from src.analyzer import filter_urgent, summarize, top_words
 
 
 def test_filter_urgent_returns_only_urgent():
@@ -26,3 +26,9 @@ def test_summarize_counts_priorities():
         "urgent": 2,
         "normal": 1,
     }
+
+
+def test_top_words_returns_most_common_words():
+    result = top_words("python python dart python dart flutter")
+
+    assert result == ["python", "dart", "flutter"]
