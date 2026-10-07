@@ -7,6 +7,10 @@ A small Python project for analyzing support tickets.
 - Filter urgent tickets
 - Summarize ticket priorities
 - Find the most common words
+- Detect ticket priority
+- Classify ticket type
+- Parse raw ticket text
+- Generate a terminal report
 
 ## Project Structure
 
@@ -14,27 +18,11 @@ A small Python project for analyzing support tickets.
 ticket_analyzer/
 ├── src/
 │   ├── models.py
-│   └── analyzer.py
+│   ├── analyzer.py
+│   └── cli.py
 ├── tests/
-│   └── test_models.py
+│   ├── test_models.py
+│   └── test_analyzer.py
 ├── requirements.txt
 ├── .gitignore
 └── README.md
-```
-
-## Usage
-
-```python
-from src.models import Ticket, Priority
-from src.analyzer import filter_urgent
-
-tickets = [
-    Ticket(title="Server is down", priority=Priority.URGENT),
-    Ticket(title="Update profile", priority=Priority.NORMAL),
-]
-
-urgent_tickets = filter_urgent(tickets)
-
-for ticket in urgent_tickets:
-    print(ticket.title)
-```
