@@ -1,3 +1,4 @@
+
 from dataclasses import dataclass
 from enum import Enum
 
@@ -13,19 +14,26 @@ class TicketType(Enum):
     FEATURE = "feature"
 
 
-@dataclass
-class Ticket:
-    title: str
-    priority: Priority = Priority.NORMAL
-    status: str = "open"
-    creator: str = ""
-    category: TicketType = TicketType.QUESTION
-
-    def is_urgent(self) -> bool:
-        return self.priority == Priority.URGENT
+class TicketStatus(Enum):
+    OPEN = "open"
+    IN_PROGRESS = "in_progress"
+    CLOSED = "closed"
 
 
 @dataclass
 class User:
     name: str
     email: str
+
+
+@dataclass
+class Ticket:
+    title: str
+    priority: Priority = Priority.NORMAL
+    status: TicketStatus = TicketStatus.OPEN
+    creator: User | None = None
+    # Keep the default consistent with classify_type().
+    category: TicketType = TicketType.FEATURE
+
+    def is_urgent(self) -> bool:
+        return self.priority == Priority.URGENT

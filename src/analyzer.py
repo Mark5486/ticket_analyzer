@@ -1,3 +1,6 @@
+
+import string
+
 from .models import Ticket, Priority, TicketType
 
 
@@ -27,6 +30,19 @@ QUESTION_KEYWORDS = {
     "ليه",
     "امتى",
 }
+
+
+def clean_words(text: str) -> set[str]:
+    arabic_punctuation = "،؛؟"
+    punctuation = string.punctuation + arabic_punctuation
+
+    words = text.lower().split()
+
+    return {
+        word.strip(punctuation)
+        for word in words
+        if word.strip(punctuation)
+    }
 
 
 def filter_urgent(tickets: list[Ticket]) -> list[Ticket]:
@@ -61,30 +77,27 @@ def top_words(text: str, count: int = 3) -> list[str]:
 
     top = sorted_items[:count]
 
-    return [word for word, freq in top]
+    return [word for word, _ in top]
 
 
 def detect_priority(text: str) -> Priority:
-    text = text.lower()
+    words = clean_words(text)
 
-    for keyword in URGENT_KEYWORDS:
-        if keyword in text:
-            return Priority.URGENT
+    if words & URGENT_KEYWORDS:
+        return Priority.URGENT
 
     return Priority.NORMAL
 
 
 def classify_type(text: str) -> TicketType:
-    text = text.lower()
+    words = clean_words(text)
 
     # BUG wins because a real problem is more important than the question format.
-    for keyword in BUG_KEYWORDS:
-        if keyword in text:
-            return TicketType.BUG
+    if words & BUG_KEYWORDS:
+        return TicketType.BUG
 
-    for keyword in QUESTION_KEYWORDS:
-        if keyword in text:
-            return TicketType.QUESTION
+    if words & QUESTION_KEYWORDS:
+        return TicketType.QUESTION
 
     return TicketType.FEATURE
 

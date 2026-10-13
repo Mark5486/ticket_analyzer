@@ -1,4 +1,5 @@
-from src.models import Ticket, Priority
+
+from src.models import Ticket, Priority, User, TicketStatus
 from src.analyzer import filter_urgent, summarize, top_words
 
 
@@ -32,3 +33,19 @@ def test_top_words_returns_most_common_words():
     result = top_words("python python dart python dart flutter")
 
     assert result == ["python", "dart", "flutter"]
+
+
+def test_ticket_can_have_a_creator():
+    user = User(name="Mark", email="mark@example.com")
+
+    ticket = Ticket(title="Fix login", creator=user)
+
+    assert ticket.creator == user
+    assert ticket.creator.name == "Mark"
+    assert ticket.creator.email == "mark@example.com"
+
+
+def test_ticket_default_status_is_open():
+    ticket = Ticket(title="Fix login")
+
+    assert ticket.status == TicketStatus.OPEN
