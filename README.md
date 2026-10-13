@@ -1,28 +1,49 @@
+
 # Ticket Analyzer
 
-A small Python project for analyzing support tickets.
+A simple Python project that analyzes support tickets.
 
 ## Features
 
-- Filter urgent tickets
-- Summarize ticket priorities
-- Find the most common words
-- Detect ticket priority
-- Classify ticket type
-- Parse raw ticket text
-- Generate a terminal report
+- Detects urgent tickets.
+- Classifies tickets as bugs, questions, or features.
+- Removes English and Arabic punctuation when cleaning words.
+- Summarizes ticket priorities.
+- Builds a readable report.
 
-## Project Structure
+## Requirements
+
+- Python 3.14 or compatible version.
+- No external packages are required for the application itself.
+
+## Run the project
+
+Activate the virtual environment if needed, then run:
+
+```powershell
+python -m src.cli "Server is down!!" "How do I login?" "Please add dark mode"
+```
+
+## Example output
 
 ```text
-ticket_analyzer/
-├── src/
-│   ├── models.py
-│   ├── analyzer.py
-│   └── cli.py
-├── tests/
-│   ├── test_models.py
-│   └── test_analyzer.py
-├── requirements.txt
-├── .gitignore
-└── README.md
+1. Server is down!! - urgent - bug
+2. How do I login? - normal - question
+3. Please add dark mode - normal - feature
+Summary:
+urgent: 1
+normal: 2
+```
+
+## Run tests
+
+```powershell
+python -m pytest
+```
+
+## Project structure
+
+- `src/models.py`: Ticket models and enums.
+- `src/analyzer.py`: Ticket analysis and reporting.
+- `src/cli.py`: Command-line interface.
+- `tests/`: Automated tests.
