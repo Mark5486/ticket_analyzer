@@ -1,6 +1,7 @@
 
-from dataclasses import dataclass
 from enum import Enum
+
+from pydantic import BaseModel
 
 
 class Priority(Enum):
@@ -20,14 +21,12 @@ class TicketStatus(Enum):
     CLOSED = "closed"
 
 
-@dataclass
-class User:
+class User(BaseModel):
     name: str
     email: str
 
 
-@dataclass
-class Ticket:
+class Ticket(BaseModel):
     title: str
     priority: Priority = Priority.NORMAL
     status: TicketStatus = TicketStatus.OPEN

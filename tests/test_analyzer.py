@@ -1,10 +1,14 @@
 
-from src.models import Priority, TicketType
+import pytest
+from pydantic import ValidationError
+
+from src.models import Priority, TicketType, Ticket
 from src.analyzer import (
     detect_priority,
     classify_type,
     parse_ticket,
     clean_words,
+    ticket_from_json,
 )
 
 
@@ -51,3 +55,27 @@ def test_clean_words_removes_arabic_punctuation():
     result = clean_words("عاجل، السيرفر واقع!")
 
     assert result == {"عاجل", "السيرفر", "واقع"}
+
+
+def test_ticket_from_valid_json():
+    ticket = ticket_from_json(
+        '{"title": "Server is down", "priority": "urgent"}'
+    )
+    assert ticket.is_urgent()
+
+
+def test_invalid_priority_raises():
+    with pytest.raises(ValidationError):
+        ticket_from_json(
+            '{"title": "x", "priority": "فإآ"}'
+        )
+
+
+def test_missing_title_raises():
+    with pytest.raises(ValidationError):
+        ticket_from_json('{"priority": "urgent"}')
+
+
+def test_round_trip():
+    t = Ticket(title="X")
+    assert Ticket.model_validate(t.model_dump()) == t

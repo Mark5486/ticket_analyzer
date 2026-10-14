@@ -132,3 +132,6 @@ def build_report(tickets: list[Ticket]) -> str:
         lines.append(f"{priority}: {count}")
 
     return "\n".join(lines)
+
+def ticket_from_json(text: str) -> Ticket:
+    return Ticket.model_validate_json(text)
